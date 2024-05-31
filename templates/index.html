@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with LLM</title>
+</head>
+<body>
+    <h1>Chat with LLM</h1>
+    <div id="chat-container">
+        <div id="chat-box"></div>
+        <input type="text" id="user-input" placeholder="Type your message here...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            var userInput = document.getElementById('user-input').value;
+            document.getElementById('user-input').value = '';
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/chat', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    var response = xhr.responseText;
+                    var chatBox = document.getElementById('chat-box');
+                    var userMessage = document.createElement('p');
+                    userMessage.textContent = 'You: ' + userInput;
+                    var modelResponse = document.createElement('p');
+                    modelResponse.textContent = 'Model: ' + response;
+                    chatBox.appendChild(userMessage);
+                    chatBox.appendChild(modelResponse);
+                }
+            };
+            xhr.send('user_input=' + userInput);
+        }
+    </script>
+</body>
+</html>
+
